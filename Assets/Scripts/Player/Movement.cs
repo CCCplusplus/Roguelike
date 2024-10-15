@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 
-public class Movement : MonoBehaviour
+public class Movement : MonoBehaviour, IDamageable
 {
     [SerializeField]
     private float speed = 5.0f;
@@ -13,7 +13,9 @@ public class Movement : MonoBehaviour
     [SerializeField]
     private float dashCooldown = 1.5f;
     [SerializeField]
-    private float attackDuration = 0.5f;
+    private float attackDuration = 1f;
+    [SerializeField]
+    private GameObject hitbox;
     [SerializeField]
     private BoxCollider2D hit;
     [SerializeField]
@@ -21,10 +23,23 @@ public class Movement : MonoBehaviour
 
     private Transform me;
     private Vector2 movementInput;
-    private Vector2 lastDirection; 
+    private Vector2 lastDirection = Vector2.right; 
     private bool isDashing;
     private float dashEndTime;
     private float nextDashTime;
+
+    private float hp;
+    private float maxHp = 100f;
+    private bool invencible = false;
+
+    private SpriteRenderer spriteRenderer;
+
+
+    private void Awake()
+    {
+        hp = maxHp;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     void Start()
     {
@@ -63,13 +78,55 @@ public class Movement : MonoBehaviour
         }
     }
 
+    public void ChangeHP(float amount)
+    {
+        if (!invencible)
+        {
+            invencible = true;
+            hp += amount;
+            hp = Mathf.Clamp(hp, 0, maxHp);
+
+            if (hp <= 0)
+            {
+                HandleDeath();
+            }
+
+            StartCoroutine(Vencible());
+        }
+    }
+
+    public void HandleDeath()
+    {
+        // TODO: Reproducir una animación de muerte, desactivar el sprite, Gameover Screen.
+        Debug.Log("El personaje ha muerto.");
+    }
+
     private IEnumerator ActivateHitbox()
     {
         hitArea.Play();
         hit.enabled = true;
         yield return new WaitForSeconds(attackDuration);
-        hit.enabled = false; 
+        hit.enabled = false;
         hitArea.Stop();
+    }
+
+
+
+    private IEnumerator Vencible()
+    {
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+        yield return new WaitForSeconds(0.2f);
+        invencible = false;
     }
 
     void Update()
@@ -86,5 +143,14 @@ public class Movement : MonoBehaviour
         {
             me.position += (Vector3)(movementInput * speed * Time.deltaTime);
         }
+
+        if (lastDirection == Vector2.right)
+            me.rotation = Quaternion.Euler(0, 0, 0);
+        else if (lastDirection == Vector2.up)
+            me.rotation = Quaternion.Euler(0, 0, 90);
+        else if (lastDirection == Vector2.down)
+            me.rotation = Quaternion.Euler(0, 0, -90);
+        else if (lastDirection == Vector2.left)
+            me.rotation = Quaternion.Euler(0, 180, 0);
     }
 }
