@@ -103,6 +103,7 @@ public class Movement : MonoBehaviour, IDamageable
 
     private IEnumerator ActivateHitbox()
     {
+        //TODO: hacer que el hitbox del ataque se mueva hacia abajo junto con las particulas para simular un slash attack.
         hitArea.Play();
         hit.enabled = true;
         yield return new WaitForSeconds(attackDuration);
