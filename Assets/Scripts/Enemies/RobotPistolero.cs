@@ -15,6 +15,9 @@ public class RobotPistolero : MonoBehaviour, IDamageable
 
     private bool shootmode = false;
 
+    //Referencias para la animacion y el sprite
+    public Animator animator;
+    public SpriteRenderer spriteR;
 
     private void Awake()
     {
@@ -84,7 +87,14 @@ public class RobotPistolero : MonoBehaviour, IDamageable
     IEnumerator Shoot()
     {
         canShoot = false;
-        GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
+
+        //Obtener una bala del pool en lugar de instanciar una nueva
+        GameObject bullet = BulletPool.Instance.GetBullet();
+
+        //Configurar la posicion y la velocidad de la bala
+        bullet.transform.position = shootPoint.position;
+
+        //GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
         bullet.GetComponent<Rigidbody2D>().velocity = transform.up * 10f; // Ajusta la velocidad según sea necesario
         yield return new WaitForSeconds(3);
         canShoot = true;
@@ -104,7 +114,22 @@ public class RobotPistolero : MonoBehaviour, IDamageable
     public void HandleDeath()
     {
         // TODO: Reproducir una animación de muerte, desactivar el sprite, Gameover Screen.
+        //Reproducir animacion de muerte
+        if(animator != null)
+        {
+            animator.SetTrigger("Die");
+        }
+
+        //Desactivar el sprite para que desaparezca visualmente
+        if(spriteR != null)
+        {
+            spriteR.enabled = false;
+        }
+        //------------------------------------------
+
         Debug.Log("El enemigo ha muerto.");
-        Destroy(gameObject);
+
+        //Destruir el objeto despues de un pequeño retraso
+        Destroy(gameObject, 2f);
     }
 }

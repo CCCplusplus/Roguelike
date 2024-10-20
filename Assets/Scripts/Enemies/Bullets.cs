@@ -14,9 +14,9 @@ public class Bullets : MonoBehaviour
             {
                 GameObject player = collision.gameObject;
                 player.GetComponent<IDamageable>()?.ChangeHP(-attackDamage);
-                Destroy(this.gameObject);
+                BulletPool.Instance.ReturnBullet(this.gameObject);
             }
-            else Destroy(this.gameObject);
+            else BulletPool.Instance.ReturnBullet(this.gameObject);
         } 
     }
 }

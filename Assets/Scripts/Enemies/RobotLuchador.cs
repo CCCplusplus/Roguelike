@@ -11,6 +11,10 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     private float currentHP;
     private bool isAttacking = false;
 
+    //Referecnias para la animacion y el sprite
+    public Animator animator;
+    public SpriteRenderer spriteR;
+
     private void Awake()
     {
        currentHP = maxHP;
@@ -85,7 +89,22 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     public void HandleDeath()
     {
         // TODO: Reproducir una animación de muerte, desactivar el sprite, Gameover Screen.
+        //Reprodurcir animacion de muerte
+        if(animator != null)
+        {
+            animator.SetTrigger("Die");
+        }
+
+        //Desactivar el sprite para que de3saparezca visualmente
+        if(spriteR != null)
+        {
+            spriteR.enabled = false;
+        }
+        //---------------------------------------
+
         Debug.Log("El enemigo ha muerto.");
+
+        //Destruir el objeto despues de un pequeño retraso
         Destroy(gameObject);
     }
 }

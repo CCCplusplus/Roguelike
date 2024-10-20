@@ -34,6 +34,9 @@ public class Movement : MonoBehaviour, IDamageable
 
     private SpriteRenderer spriteRenderer;
 
+    //Agregar el controlador de animacion y asignar el GameOver screen desde el inspector
+    public Animator animator;
+    public GameObject gameOverScreen;
 
     private void Awake()
     {
@@ -99,16 +102,40 @@ public class Movement : MonoBehaviour, IDamageable
     {
         // TODO: Reproducir una animación de muerte, desactivar el sprite, Gameover Screen.
         Debug.Log("El personaje ha muerto.");
+        //Reproduce la animacion de muerte
+        animator.SetTrigger("Die");
+        //Desactiva el sprite del jugador
+        spriteRenderer.enabled = false;
+        //Mostrar la pantalla de Game Over despues de un breve retraso
+        StartCoroutine(ShowGameOverScreen());
+    }
+
+    private IEnumerator ShowGameOverScreen()
+    {
+        //Espera a que termine la animacion(ajusta el tiempo la duracion de la animacion)
+        yield return new WaitForSeconds(2.0f);
+        //Mostrar pantalla de Game Over
+        gameOverScreen.SetActive(true);
     }
 
     private IEnumerator ActivateHitbox()
     {
         //TODO: hacer que el hitbox del ataque se mueva hacia abajo junto con las particulas para simular un slash attack.
-        hitArea.Play();
+        //Mueve el hitbox hacia abajo
+        Vector3 originalPosition = hitbox.transform.localPosition;
+        Vector3 slashPosition = originalPosition + new Vector3(0, -1f, 0); //Ajusta el valor como lo desees
+
+        hitbox.transform.localPosition = slashPosition;
+        hitArea.Play(); //Reproduce las particulas
         hit.enabled = true;
+
         yield return new WaitForSeconds(attackDuration);
+
         hit.enabled = false;
-        hitArea.Stop();
+        hitArea.Stop(); //Detener las particulas
+
+        //Restablece la posicion original del hitbox
+        hitbox.transform.localPosition = originalPosition;
     }
 
 
