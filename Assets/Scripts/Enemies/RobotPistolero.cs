@@ -16,7 +16,7 @@ public class RobotPistolero : MonoBehaviour, IDamageable
     private bool shootmode = false;
 
     //Referencias para la animacion y el sprite
-    public Animator animator;
+    //public Animator animator;
     public SpriteRenderer spriteR;
 
     private void Awake()
@@ -113,12 +113,12 @@ public class RobotPistolero : MonoBehaviour, IDamageable
 
     public void HandleDeath()
     {
-        // TODO: Reproducir una animación de muerte, desactivar el sprite, Gameover Screen.
+        //Marco Anotnio 
         //Reproducir animacion de muerte
-        if(animator != null)
-        {
-            animator.SetTrigger("Die");
-        }
+        //if(animator != null)
+        //{
+        //    animator.SetTrigger("Die");
+        //}
 
         //Desactivar el sprite para que desaparezca visualmente
         if(spriteR != null)

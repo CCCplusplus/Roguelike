@@ -12,7 +12,7 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     private bool isAttacking = false;
 
     //Referecnias para la animacion y el sprite
-    public Animator animator;
+    //public Animator animator;
     public SpriteRenderer spriteR;
 
     private void Awake()
@@ -88,12 +88,12 @@ public class RobotLuchador : MonoBehaviour, IDamageable
 
     public void HandleDeath()
     {
-        // TODO: Reproducir una animación de muerte, desactivar el sprite, Gameover Screen.
+        //MarcoAntonio
         //Reprodurcir animacion de muerte
-        if(animator != null)
-        {
-            animator.SetTrigger("Die");
-        }
+        //if(animator != null)
+        //{
+        //    animator.SetTrigger("Die");
+        //}
 
         //Desactivar el sprite para que de3saparezca visualmente
         if(spriteR != null)
@@ -105,6 +105,6 @@ public class RobotLuchador : MonoBehaviour, IDamageable
         Debug.Log("El enemigo ha muerto.");
 
         //Destruir el objeto despues de un pequeño retraso
-        Destroy(gameObject);
+        Destroy(gameObject, 2f);
     }
 }

@@ -12,14 +12,14 @@ public class Movement : MonoBehaviour, IDamageable
     private float dashDuration = 0.2f; 
     [SerializeField]
     private float dashCooldown = 1.5f;
-    [SerializeField]
-    private float attackDuration = 1f;
-    [SerializeField]
-    private GameObject hitbox;
-    [SerializeField]
-    private BoxCollider2D hit;
-    [SerializeField]
-    private ParticleSystem hitArea;
+    //[SerializeField]
+    //private float attackDuration = 1f;
+    //[SerializeField]
+    //private GameObject hitbox;
+    //[SerializeField]
+    //private BoxCollider2D hit;
+    //[SerializeField]
+    //private ParticleSystem hitArea;
 
     private Transform me;
     private Vector2 movementInput;
@@ -35,7 +35,7 @@ public class Movement : MonoBehaviour, IDamageable
     private SpriteRenderer spriteRenderer;
 
     //Agregar el controlador de animacion y asignar el GameOver screen desde el inspector
-    public Animator animator;
+    //public Animator animator;
     public GameObject gameOverScreen;
 
     private void Awake()
@@ -75,10 +75,10 @@ public class Movement : MonoBehaviour, IDamageable
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            StartCoroutine(ActivateHitbox());
-        }
+        //if (context.performed)
+        //{
+        //    StartCoroutine(ActivateHitbox());
+        //}
     }
 
     public void ChangeHP(float amount)
@@ -102,10 +102,13 @@ public class Movement : MonoBehaviour, IDamageable
     {
         // TODO: Reproducir una animación de muerte, desactivar el sprite, Gameover Screen.
         Debug.Log("El personaje ha muerto.");
+
         //Reproduce la animacion de muerte
-        animator.SetTrigger("Die");
+        //animator.SetTrigger("Die");
+
         //Desactiva el sprite del jugador
         spriteRenderer.enabled = false;
+
         //Mostrar la pantalla de Game Over despues de un breve retraso
         StartCoroutine(ShowGameOverScreen());
     }
@@ -118,25 +121,14 @@ public class Movement : MonoBehaviour, IDamageable
         gameOverScreen.SetActive(true);
     }
 
-    private IEnumerator ActivateHitbox()
-    {
-        //TODO: hacer que el hitbox del ataque se mueva hacia abajo junto con las particulas para simular un slash attack.
-        //Mueve el hitbox hacia abajo
-        Vector3 originalPosition = hitbox.transform.localPosition;
-        Vector3 slashPosition = originalPosition + new Vector3(0, -1f, 0); //Ajusta el valor como lo desees
-
-        hitbox.transform.localPosition = slashPosition;
-        hitArea.Play(); //Reproduce las particulas
-        hit.enabled = true;
-
-        yield return new WaitForSeconds(attackDuration);
-
-        hit.enabled = false;
-        hitArea.Stop(); //Detener las particulas
-
-        //Restablece la posicion original del hitbox
-        hitbox.transform.localPosition = originalPosition;
-    }
+    //private IEnumerator ActivateHitbox()
+    //{
+    //    hitArea.Play();
+    //    hit.enabled = true;
+    //    yield return new WaitForSeconds(attackDuration);
+    //    hit.enabled = false;
+    //    hitArea.Stop();
+    //}
 
 
 
