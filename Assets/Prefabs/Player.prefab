@@ -5027,7 +5027,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300028, guid: d13f53c1f0f786e4c970a9351a37b322, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8833ba6e09c1b3a409fabbe749a5d8e6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5070,18 +5070,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.08318445, y: -0.38819492}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5, y: 1.8}
+    oldSize: {x: 2.6636364, y: 1.6636363}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.1361201, y: 0.62693}
   m_EdgeRadius: 0
 --- !u!114 &3335410334483468269
 MonoBehaviour:
@@ -5103,6 +5103,8 @@ MonoBehaviour:
   hitbox: {fileID: 7182235179993268293}
   hit: {fileID: 4124710814310607}
   hitArea: {fileID: 2890596008327052796}
+  animator: {fileID: 0}
+  gameOverScreen: {fileID: 0}
 --- !u!114 &2047248108665363671
 MonoBehaviour:
   m_ObjectHideFlags: 0

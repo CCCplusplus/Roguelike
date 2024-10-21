@@ -35,12 +35,12 @@ public class RobotPistolero : MonoBehaviour, IDamageable
         {
             if (horizontal)
             {
-                transform.Translate(Vector2.up * direction * speed * Time.deltaTime);
+                transform.Translate(Vector2.right * direction * speed * Time.deltaTime);
                 transform.eulerAngles = new Vector3(0, 0, movingRight ? -90 : 90);
             }
             else
             {
-                transform.Translate(Vector2.up * direction * speed * Time.deltaTime);
+                transform.Translate(Vector2.right * direction * speed * Time.deltaTime);
                 transform.eulerAngles = new Vector3(0, 0, movingRight ? 0 : 180);
             }
         }
@@ -57,7 +57,7 @@ public class RobotPistolero : MonoBehaviour, IDamageable
 
     private void CheckForPlayer()
     {
-        RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, transform.up, 10f);
+        RaycastHit2D hit = Physics2D.Raycast(shootPoint.position, transform.right, 10f);
 
 
         if (hit.collider != null && hit.collider.CompareTag("Player"))
@@ -78,7 +78,7 @@ public class RobotPistolero : MonoBehaviour, IDamageable
         if (shootPoint != null)
         {
             Gizmos.color = Color.red; // Establece el color del Gizmo a rojo
-            Vector3 direction = transform.up * 10f; // Ajusta la longitud de tu raycast según sea necesario
+            Vector3 direction = transform.right * 10f; // Ajusta la longitud de tu raycast según sea necesario
             Gizmos.DrawRay(shootPoint.position, direction);
         }
     }
@@ -95,7 +95,7 @@ public class RobotPistolero : MonoBehaviour, IDamageable
         bullet.transform.position = shootPoint.position;
 
         //GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
-        bullet.GetComponent<Rigidbody2D>().velocity = transform.up * 10f; // Ajusta la velocidad según sea necesario
+        bullet.GetComponent<Rigidbody2D>().velocity = transform.right * 10f; // Ajusta la velocidad según sea necesario
         yield return new WaitForSeconds(3);
         canShoot = true;
     }
