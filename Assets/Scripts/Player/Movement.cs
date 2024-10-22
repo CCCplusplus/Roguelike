@@ -12,14 +12,12 @@ public class Movement : MonoBehaviour, IDamageable
     private float dashDuration = 0.2f; 
     [SerializeField]
     private float dashCooldown = 1.5f;
-    //[SerializeField]
-    //private float attackDuration = 1f;
-    //[SerializeField]
-    //private GameObject hitbox;
-    //[SerializeField]
-    //private BoxCollider2D hit;
-    //[SerializeField]
-    //private ParticleSystem hitArea;
+    [SerializeField]
+    private float attackDuration = 1f;
+    [SerializeField]
+    private GameObject hitbox;
+    [SerializeField]
+    private BoxCollider2D hit;
 
     private Transform me;
     private Vector2 movementInput;
@@ -31,6 +29,8 @@ public class Movement : MonoBehaviour, IDamageable
     private float hp;
     private float maxHp = 100f;
     private bool invencible = false;
+
+    bool attacking = false;
 
     private SpriteRenderer spriteRenderer;
 
@@ -75,10 +75,11 @@ public class Movement : MonoBehaviour, IDamageable
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        //if (context.performed)
-        //{
-        //    StartCoroutine(ActivateHitbox());
-        //}
+        if (context.performed)
+        {
+            if (!attacking)
+            StartCoroutine(ActivateHitbox());
+        }
     }
 
     public void ChangeHP(float amount)
@@ -121,14 +122,14 @@ public class Movement : MonoBehaviour, IDamageable
         gameOverScreen.SetActive(true);
     }
 
-    //private IEnumerator ActivateHitbox()
-    //{
-    //    hitArea.Play();
-    //    hit.enabled = true;
-    //    yield return new WaitForSeconds(attackDuration);
-    //    hit.enabled = false;
-    //    hitArea.Stop();
-    //}
+    private IEnumerator ActivateHitbox()
+    {
+        attacking = true;
+        hit.enabled = true;
+        yield return new WaitForSeconds(attackDuration);
+        hit.enabled = false;
+        attacking = false;
+    }
 
 
 

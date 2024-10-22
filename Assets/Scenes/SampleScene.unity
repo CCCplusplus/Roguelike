@@ -344,6 +344,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RobotPistolero
       objectReference: {fileID: 0}
+    - target: {fileID: 3276893226551725149, guid: 7b37bec952c76964f94d6837dedf9ad1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -908,6 +912,11 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!61 &1773447417 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 825998150186912001, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+  m_PrefabInstance: {fileID: 2953219417099519479}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1796023879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,10 +1122,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4124710814310607, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3067483864470696842, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1160,18 +1165,10 @@ PrefabInstance:
     - target: {fileID: 3335410334483468269, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
       propertyPath: hit
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3335410334483468269, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
-      propertyPath: hitArea
-      value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1773447417}
     - target: {fileID: 8456235143568696880, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8685866231206969641, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
