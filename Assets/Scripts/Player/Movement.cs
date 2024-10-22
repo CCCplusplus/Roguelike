@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 
-public class Movement : MonoBehaviour, IDamageable
+public class Movement : MonoBehaviour, IDamageable, IExperience
 {
     [SerializeField]
     private float speed = 5.0f;
@@ -25,6 +25,8 @@ public class Movement : MonoBehaviour, IDamageable
     private bool isDashing;
     private float dashEndTime;
     private float nextDashTime;
+    private float exp = 0.0f;
+    private int level = 0;
 
     private float hp;
     private float maxHp = 100f;
@@ -148,6 +150,22 @@ public class Movement : MonoBehaviour, IDamageable
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
         yield return new WaitForSeconds(0.2f);
         invencible = false;
+    }
+
+    public void AddEXP(float amount)
+    {
+        exp += amount;
+
+        if (exp >= 10)
+        {
+            exp = 0;
+            LvlUp();
+        }
+    }
+
+    public void LvlUp()
+    {
+
     }
 
     void Update()

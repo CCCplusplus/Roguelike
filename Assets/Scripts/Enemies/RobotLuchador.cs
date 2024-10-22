@@ -5,25 +5,27 @@ public class RobotLuchador : MonoBehaviour, IDamageable
 {
     public float maxHP = 20.0f;
     public float attackDamage = 20.0f;
-    public float speed = 3.0f; // Velocidad de persecución
-    private Transform player; // Referencia al jugador
+    public float speed = 3.0f;
+    private Transform player;
     public float detectionRange = 10.0f;
-    public float attackDistance = 2.5f; // Distancia para detenerse y atacar
+    public float attackDistance = 2.5f;
     private float currentHP;
     private bool isAttacking = false;
-    private bool canAttack = true; // Controlar el cooldown del ataque
+    private bool canAttack = true;
+    private GameObject playerG;
+    private float expValue = 2.0f;
 
     // Referencias para la animacion y el sprite
     // public Animator animator;
     public SpriteRenderer spriteR;
-    public GameObject attackHitbox; // GameObject que representa el hitbox de ataque
+    public GameObject attackHitbox;
 
     private void Awake()
     {
         currentHP = maxHP;
-        GameObject playerG = GameObject.FindGameObjectWithTag("Player");
+        playerG = GameObject.FindGameObjectWithTag("Player");
         player = playerG.transform;
-        attackHitbox.SetActive(false); // Asegurarse de que el hitbox está inicialmente desactivado
+        attackHitbox.SetActive(false);
     }
 
     private void Update()
@@ -32,18 +34,15 @@ public class RobotLuchador : MonoBehaviour, IDamageable
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-            // Verificar si el enemigo puede atacar y está dentro del rango de detección
+            
             if (distanceToPlayer < detectionRange && distanceToPlayer > attackDistance && canAttack)
             {
-                // Perseguir al jugador
                 Vector2 direction = (player.position - transform.position).normalized;
                 transform.position += (Vector3)direction * speed * Time.deltaTime;
             }
             else if (distanceToPlayer <= attackDistance && canAttack)
-            {
-                // Detenerse y prepararse para atacar
                 StartCoroutine(ActivateHitbox());
-            }
+            
         }
     }
 
@@ -69,9 +68,7 @@ public class RobotLuchador : MonoBehaviour, IDamageable
         currentHP = Mathf.Clamp(currentHP, 0, maxHP);
 
         if (currentHP <= 0)
-        {
             HandleDeath();
-        }
     }
 
     public void HandleDeath()
@@ -88,6 +85,8 @@ public class RobotLuchador : MonoBehaviour, IDamageable
         {
             spriteR.enabled = false;
         }
+
+        playerG.GetComponent<Movement>().AddEXP(expValue);
 
         Debug.Log("El enemigo ha muerto.");
         // Destruir el objeto después de un pequeño retraso

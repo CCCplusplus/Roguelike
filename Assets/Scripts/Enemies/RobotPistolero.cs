@@ -12,6 +12,8 @@ public class RobotPistolero : MonoBehaviour, IDamageable
     private bool movingRight = true;
     private float direction = 1f;
     private bool canShoot = true;
+    private GameObject playerG;
+    private float expValue = 2.0f;
 
     private bool shootmode = false;
 
@@ -21,6 +23,7 @@ public class RobotPistolero : MonoBehaviour, IDamageable
 
     private void Awake()
     {
+        playerG = GameObject.FindGameObjectWithTag("Player");
         currentHP = maxHP;
     }
     private void Update()
@@ -125,7 +128,8 @@ public class RobotPistolero : MonoBehaviour, IDamageable
         {
             spriteR.enabled = false;
         }
-        //------------------------------------------
+
+        playerG.GetComponent<Movement>().AddEXP(expValue);
 
         Debug.Log("El enemigo ha muerto.");
 
