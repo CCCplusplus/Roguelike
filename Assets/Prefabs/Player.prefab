@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5349908382968852108
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5390919455815415134}
+  m_Layer: 6
+  m_Name: shooter
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5390919455815415134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5349908382968852108}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.82, y: 0.12, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3067483864470696842}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7182235179993268293
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,6 +157,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3038813761279343734}
+  - {fileID: 5390919455815415134}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3591548583307684292
@@ -242,8 +274,11 @@ MonoBehaviour:
   dashDuration: 0.2
   dashCooldown: 1.5
   attackDuration: 1
+  secundaryCooldown: 6
   hitbox: {fileID: 7182235179993268293}
   hit: {fileID: 825998150186912001}
+  fishPrefab: {fileID: 1591128750975774723, guid: 6851b12d4e82d834a9d6bba203ec3f1e, type: 3}
+  shootPoint: {fileID: 5390919455815415134}
   gameOverScreen: {fileID: 0}
 --- !u!114 &2047248108665363671
 MonoBehaviour:
@@ -319,7 +354,19 @@ MonoBehaviour:
     m_ActionId: 78b1f338-b628-4a29-8db9-84ac525fc0f6
     m_ActionName: Cat/Attack[/Mouse/leftButton]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3335410334483468269}
+        m_TargetAssemblyTypeName: Movement, Assembly-CSharp
+        m_MethodName: OnSecundario
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f831c5a7-01d0-468c-8dd3-e2a5c6162864
     m_ActionName: Cat/Secundario[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0

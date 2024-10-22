@@ -9,24 +9,33 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     [SerializeField]
     private float dashSpeedMultiplier = 3f; // Multiplicador de la velocidad de dash puede que este algo alto.
     [SerializeField]
-    private float dashDuration = 0.2f; 
+    private float dashDuration = 0.2f;
     [SerializeField]
     private float dashCooldown = 1.5f;
     [SerializeField]
     private float attackDuration = 1f;
     [SerializeField]
+    private float secundaryCooldown = 6f;
+    [SerializeField]
     private GameObject hitbox;
     [SerializeField]
     private BoxCollider2D hit;
+    [SerializeField]
+    private GameObject fishPrefab;
+    [SerializeField]
+    private Transform shootPoint;
 
     private Transform me;
     private Vector2 movementInput;
-    private Vector2 lastDirection = Vector2.right; 
+    private Vector2 lastDirection = Vector2.right;
     private bool isDashing;
     private float dashEndTime;
     private float nextDashTime;
     private float exp = 0.0f;
     private int level = 0;
+    private bool secundaryactivate = false;
+    private bool canShoot = true;
+
 
     private float hp;
     private float maxHp = 100f;
@@ -71,7 +80,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     void StartDash()
     {
         isDashing = true;
-        dashEndTime = Time.time + dashDuration; 
+        dashEndTime = Time.time + dashDuration;
         nextDashTime = Time.time + dashCooldown;
     }
 
@@ -80,7 +89,16 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         if (context.performed)
         {
             if (!attacking)
-            StartCoroutine(ActivateHitbox());
+                StartCoroutine(ActivateHitbox());
+        }
+    }
+
+    public void OnSecundario(InputAction.CallbackContext context)
+    {
+        if (secundaryactivate)
+        {
+            if (context.performed && canShoot && !attacking)
+                StartCoroutine(Shoot());
         }
     }
 
@@ -134,6 +152,16 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     }
 
 
+    IEnumerator Shoot()
+    {
+        canShoot = false;
+
+        GameObject fish = Instantiate(fishPrefab, shootPoint.position, Quaternion.identity);
+        fish.GetComponent<Rigidbody2D>().velocity = transform.right * 10f;
+        yield return new WaitForSeconds(secundaryCooldown);
+        canShoot = true;
+    }
+
 
     private IEnumerator Vencible()
     {
@@ -154,10 +182,12 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void AddEXP(float amount)
     {
+        Debug.Log("Exp Increased by " +  amount);
         exp += amount;
 
         if (exp >= 10)
         {
+            Debug.Log("level up time!");
             exp = 0;
             LvlUp();
         }
@@ -165,6 +195,30 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void LvlUp()
     {
+        if (level == 0)
+        {
+            Debug.Log("LevelUP!");
+            secundaryactivate = true;
+            level = 1;
+            return;
+        }
+
+        if (level == 1)
+        {
+            dashCooldown /= 2f;
+            level = 2;
+            return;
+        }
+
+        if (level == 2)
+        {
+            secundaryCooldown /= 2f;
+            level = 3;
+            return;
+        }
+
+        if (level == 3)
+            return;
 
     }
 

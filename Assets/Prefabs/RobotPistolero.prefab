@@ -105,7 +105,6 @@ MonoBehaviour:
   horizontal: 0
   bulletPrefab: {fileID: 1684189140455181201, guid: 0837e94cbe7f86e4a83e74390f616765, type: 3}
   shootPoint: {fileID: 2361847995141194395}
-  animator: {fileID: 0}
   spriteR: {fileID: 0}
 --- !u!61 &1017501253467474374
 BoxCollider2D:
@@ -204,7 +203,7 @@ Transform:
   m_GameObject: {fileID: 5913955730270070012}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.05, z: 0}
+  m_LocalPosition: {x: 0, y: 0.58, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
