@@ -16,6 +16,11 @@ public class RobotPistolero : MonoBehaviour, IDamageable
     private float expValue = 2.0f;
 
     private bool shootmode = false;
+    private bool invencible = false;
+
+    private SpriteRenderer spriteRenderer;
+
+    public static event System.Action OnEnemyDeath;
 
     //Referencias para la animacion y el sprite
     //public Animator animator;
@@ -25,6 +30,7 @@ public class RobotPistolero : MonoBehaviour, IDamageable
     {
         playerG = GameObject.FindGameObjectWithTag("Player");
         currentHP = maxHP;
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     private void Update()
     {
@@ -105,12 +111,16 @@ public class RobotPistolero : MonoBehaviour, IDamageable
 
     public void ChangeHP(float amount)
     {
-        currentHP += amount;
-        currentHP = Mathf.Clamp(currentHP, 0, maxHP);
-
-        if (currentHP <= 0)
+        if (!invencible)
         {
-            HandleDeath();
+            invencible = true;
+            currentHP += amount;
+            currentHP = Mathf.Clamp(currentHP, 0, maxHP);
+
+            if (currentHP <= 0)
+                HandleDeath();
+
+            StartCoroutine(Vencible());
         }
     }
 
@@ -123,17 +133,38 @@ public class RobotPistolero : MonoBehaviour, IDamageable
         //    animator.SetTrigger("Die");
         //}
 
+
         //Desactivar el sprite para que desaparezca visualmente
-        if(spriteR != null)
+        if (spriteR != null)
         {
             spriteR.enabled = false;
         }
 
         playerG.GetComponent<Movement>().AddEXP(expValue);
 
+
+
         Debug.Log("El enemigo ha muerto.");
 
         //Destruir el objeto despues de un pequeño retraso
-        Destroy(gameObject, 2f);
+        //quite el retraso para hacer test al spawn lo devolvemos cuando tengamos animaciones de muertes.
+        Destroy(gameObject);
+        OnEnemyDeath?.Invoke();
+    }
+
+    private IEnumerator Vencible()
+    {
+
+        for (int i = 0; i < 3; i++)
+        {
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
+            yield return new WaitForSeconds(0.2f);
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        invencible = false;
+
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
     }
 }

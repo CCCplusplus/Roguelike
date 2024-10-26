@@ -15,6 +15,12 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     private GameObject playerG;
     private float expValue = 2.0f;
 
+    private bool invencible = false;
+
+    private SpriteRenderer spriteRenderer;
+
+    public static event System.Action OnEnemyDeath;
+
     // Referencias para la animacion y el sprite
     // public Animator animator;
     public SpriteRenderer spriteR;
@@ -26,6 +32,7 @@ public class RobotLuchador : MonoBehaviour, IDamageable
         playerG = GameObject.FindGameObjectWithTag("Player");
         player = playerG.transform;
         attackHitbox.SetActive(false);
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -64,11 +71,17 @@ public class RobotLuchador : MonoBehaviour, IDamageable
 
     public void ChangeHP(float amount)
     {
-        currentHP += amount;
-        currentHP = Mathf.Clamp(currentHP, 0, maxHP);
+        if (!invencible)
+        {
+            invencible = true;
+            currentHP += amount;
+            currentHP = Mathf.Clamp(currentHP, 0, maxHP);
 
-        if (currentHP <= 0)
-            HandleDeath();
+            if (currentHP <= 0)
+                HandleDeath();
+
+            StartCoroutine(Vencible());
+        }
     }
 
     public void HandleDeath()
@@ -80,6 +93,7 @@ public class RobotLuchador : MonoBehaviour, IDamageable
         //     animator.SetTrigger("Die");
         // }
 
+
         // Desactivar el sprite para que desaparezca visualmente
         if (spriteR != null)
         {
@@ -89,7 +103,25 @@ public class RobotLuchador : MonoBehaviour, IDamageable
         playerG.GetComponent<Movement>().AddEXP(expValue);
 
         Debug.Log("El enemigo ha muerto.");
-        // Destruir el objeto después de un pequeño retraso
-        Destroy(gameObject, 2f);
+        // Destruir el objeto después de un pequeño retraso 
+        //quite el retraso para hacer test al spawn lo devolvemos cuando tengamos animaciones de muertes.
+        Destroy(gameObject);
+        OnEnemyDeath?.Invoke();
+    }
+
+    private IEnumerator Vencible()
+    {
+
+        for (int i = 0; i < 3; i++)
+        {
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
+            yield return new WaitForSeconds(0.2f);
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        invencible = false;
+
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
     }
 }
