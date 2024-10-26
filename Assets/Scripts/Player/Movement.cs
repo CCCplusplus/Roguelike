@@ -165,19 +165,18 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     private IEnumerator Vencible()
     {
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
-        yield return new WaitForSeconds(0.2f);
+        //Gracias por el comentario profe la neta no se me habia ocurrido jajajaja
+        for (int i = 0; i < 6; i++)
+        {
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
+            yield return new WaitForSeconds(0.2f);
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+            yield return new WaitForSeconds(0.2f);
+        }
+        
         invencible = false;
+
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
     }
 
     public void AddEXP(float amount)
@@ -193,10 +192,14 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         }
     }
 
+    //TODO: Crear un efecto de particulas, hacerle Play(); a ese efecto cada vez que se suba de nivel
+    //aseguarse de que el ese efecto de particulas no sea loop, ni play on awake.
     public void LvlUp()
     {
         if (level == 0)
         {
+            //TODO: Que haya una imagen que represente la habilidad del secundaria, que este tachada
+            //cuando se suba de nivel cambiar la imagen por una no tachada, y durante el cooldown que se cambia a la imagen con tonos grises.
             Debug.Log("LevelUP!");
             secundaryactivate = true;
             level = 1;

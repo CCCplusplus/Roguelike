@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8585555693318835336}
   - component: {fileID: 1140576294005703917}
   - component: {fileID: 1789665075727280163}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 5129843238336108613}
   - component: {fileID: 1999626297178121026}
   - component: {fileID: 2904260855955426676}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RobotPeleador
   m_TagString: Enemy
   m_Icon: {fileID: 0}

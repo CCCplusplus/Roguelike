@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4509612086639982503}
   - component: {fileID: 1017501253467474374}
   - component: {fileID: 6724582351554710137}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RobotPistolero
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2361847995141194395}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
