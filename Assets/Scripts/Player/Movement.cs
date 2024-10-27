@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Movement : MonoBehaviour, IDamageable, IExperience
 {
@@ -25,6 +26,14 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     [SerializeField]
     private Transform shootPoint;
 
+    //MarcoAntonio
+    [SerializeField] private ParticleSystem levelUpEffect; //Efecto de particulas
+    [SerializeField] private Image secondaryAbilityImage; //Imagen de habilidad secundaria
+    [SerializeField] private Sprite secondaryAbilityActive; //Sprite no tachado
+    [SerializeField] private Sprite secondaryAbilityInactive; //Sprite tachado
+    [SerializeField] private Sprite secondaryAbilityCooldown; //Sprite en tonos grises
+    //---------------------------
+
     private Transform me;
     private Vector2 movementInput;
     private Vector2 lastDirection = Vector2.right;
@@ -45,10 +54,11 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     private SpriteRenderer spriteRenderer;
 
+    //MarcoAntonio
     //Agregar el controlador de animacion y asignar el GameOver screen desde el inspector
     //public Animator animator;
     public GameObject gameOverScreen;
-
+    //----------------------------------------
     private void Awake()
     {
         hp = maxHp;
@@ -58,6 +68,15 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     void Start()
     {
         me = transform;
+        //MarcoAntonio
+        if (levelUpEffect)
+        {
+            var main = levelUpEffect.main;
+            main.loop = false;
+            main.playOnAwake = false;
+        }
+        UpdateSecondaryAbilityImage();
+        //--------------------------
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -121,7 +140,6 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void HandleDeath()
     {
-        // TODO: Reproducir una animación de muerte, desactivar el sprite, Gameover Screen.
         Debug.Log("El personaje ha muerto.");
 
         //Reproduce la animacion de muerte
@@ -156,10 +174,18 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     {
         canShoot = false;
 
+        //MarcoAntonio-----------------------
+        UpdateSecondaryAbilityImage(true); //Cambia la imagen a gris
+        //--------------------------
+
         GameObject fish = Instantiate(fishPrefab, shootPoint.position, Quaternion.identity);
         fish.GetComponent<Rigidbody2D>().velocity = transform.right * 10f;
         yield return new WaitForSeconds(secundaryCooldown);
         canShoot = true;
+
+        //MarcoAntonio-----------------------
+        UpdateSecondaryAbilityImage(); //Restarua la imagen
+        //--------------------------
     }
 
 
@@ -196,13 +222,19 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     //aseguarse de que el ese efecto de particulas no sea loop, ni play on awake.
     public void LvlUp()
     {
+        if (levelUpEffect && !levelUpEffect.isPlaying)
+        {
+            levelUpEffect.Play(); //Activa el efecto de particulas solo cuando sube de nivel
+        }
         if (level == 0)
         {
             //TODO: Que haya una imagen que represente la habilidad del secundaria, que este tachada
-            //cuando se suba de nivel cambiar la imagen por una no tachada, y durante el cooldown que se cambia a la imagen con tonos grises.
+            //cuando se suba de nivel cambiar la imagen por una no tachada,
+            //y durante el cooldown que se cambia a la imagen con tonos grises.
             Debug.Log("LevelUP!");
             secundaryactivate = true;
             level = 1;
+            UpdateSecondaryAbilityImage();
             return;
         }
 
@@ -224,6 +256,18 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             return;
 
     }
+    
+    //Marco Antonio
+    void UpdateSecondaryAbilityImage(bool isOnCooldown = false)
+    {
+        if (!secundaryactivate)
+            secondaryAbilityImage.sprite = secondaryAbilityInactive;
+        else if (isOnCooldown)
+            secondaryAbilityImage.sprite = secondaryAbilityCooldown;
+        else
+            secondaryAbilityImage.sprite = secondaryAbilityActive;
+    }
+    //-------------------
 
     void Update()
     {
