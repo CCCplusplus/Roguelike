@@ -173,8 +173,12 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     {
         exp = 0.0f;
         level = 0;
-        hp = 100;
+        hp = maxHp;
+        secundaryactivate = false;
         yield return new WaitForSeconds(3);
+        UpdateSecondaryAbilityImage();
+        secundaryCooldown = 6f;
+        dashCooldown = 1.5f;
         transform.position = new Vector3(0, 0, 0);
         spriteRenderer.enabled = true;
         death = false;
