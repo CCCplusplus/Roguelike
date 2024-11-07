@@ -58,6 +58,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     //Agregar el controlador de animacion y asignar el GameOver screen desde el inspector
     //public Animator animator;
     public GameObject gameOverScreen;
+    private bool death;
     //----------------------------------------
     private void Awake()
     {
@@ -81,6 +82,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if(death) { return; }
         movementInput = context.ReadValue<Vector2>().normalized;
         if (movementInput != Vector2.zero)
         {
@@ -90,6 +92,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void OnDash(InputAction.CallbackContext context)
     {
+        if (death) { return; }
         if (context.performed && Time.time >= nextDashTime && !isDashing)
         {
             StartDash();
@@ -98,6 +101,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     void StartDash()
     {
+
         isDashing = true;
         dashEndTime = Time.time + dashDuration;
         nextDashTime = Time.time + dashCooldown;
@@ -105,6 +109,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (death) { return; }
         if (context.performed)
         {
             if (!attacking)
@@ -114,6 +119,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void OnSecundario(InputAction.CallbackContext context)
     {
+        if (death) { return; }
         if (secundaryactivate)
         {
             if (context.performed && canShoot && !attacking)
@@ -149,7 +155,10 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         spriteRenderer.enabled = false;
 
         //Mostrar la pantalla de Game Over despues de un breve retraso
-        StartCoroutine(ShowGameOverScreen());
+        //StartCoroutine(ShowGameOverScreen());
+        death = true;
+        StartCoroutine(Reset());
+        
     }
 
     private IEnumerator ShowGameOverScreen()
@@ -158,6 +167,21 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         yield return new WaitForSeconds(2.0f);
         //Mostrar pantalla de Game Over
         gameOverScreen.SetActive(true);
+    }
+
+    private IEnumerator Reset()
+    {
+        exp = 0.0f;
+        level = 0;
+        hp = maxHp;
+        secundaryactivate = false;
+        yield return new WaitForSeconds(3);
+        UpdateSecondaryAbilityImage();
+        secundaryCooldown = 6f;
+        dashCooldown = 1.5f;
+        transform.position = new Vector3(0, 0, 0);
+        spriteRenderer.enabled = true;
+        death = false;
     }
 
     private IEnumerator ActivateHitbox()
