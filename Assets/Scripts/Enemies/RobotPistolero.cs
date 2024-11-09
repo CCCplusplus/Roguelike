@@ -13,7 +13,7 @@ public class RobotPistolero : MonoBehaviour, IDamageable
     private float direction = 1f;
     private bool canShoot = true;
     private GameObject playerG;
-    private float expValue = 2.0f;
+    private float expValue = 20.0f;
 
     private bool shootmode = false;
     private bool invencible = false;

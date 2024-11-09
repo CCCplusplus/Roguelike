@@ -13,7 +13,7 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     private bool isAttacking = false;
     private bool canAttack = true;
     private GameObject playerG;
-    private float expValue = 2.0f;
+    private float expValue = 20.0f;
 
     private bool invencible = false;
 
