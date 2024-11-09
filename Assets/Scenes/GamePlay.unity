@@ -323,6 +323,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1513281620258226417, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 59eed0ade00140b4085286b92eb79ad8, type: 3}
+    - target: {fileID: 1513631960262873729, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: BarBackGroundSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 59eed0ade00140b4085286b92eb79ad8, type: 3}
+    - target: {fileID: 1695686835323462217, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697258848307607891, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697258848307607891, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0621282
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697258848307607891, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 6.241734
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697258848307607891, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697258848307607891, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 3067483864470696842, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -367,6 +399,26 @@ PrefabInstance:
       propertyPath: transition_Manager
       value: 
       objectReference: {fileID: 930649451}
+    - target: {fileID: 3823725687022695537, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3824980636394303339, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1626333
+      objectReference: {fileID: 0}
+    - target: {fileID: 3824980636394303339, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5.2287893
+      objectReference: {fileID: 0}
+    - target: {fileID: 3824980636394303339, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4006321639466812601, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: BarBackGroundSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ad835eed8e169d94384cad6ec71fa271, type: 3}
     - target: {fileID: 8456235143568696880, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
       propertyPath: m_Name
       value: Player
