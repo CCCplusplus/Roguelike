@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour, IDamageable, IExperience
 {
@@ -28,6 +27,8 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     private Transform shootPoint;
     [SerializeField]
     private Transition_Manager transition_Manager;
+    [SerializeField]
+    private Canvas pause;
 
     //MarcoAntonio
     [SerializeField] private ParticleSystem levelUpEffect; //Efecto de particulas
@@ -47,6 +48,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     private int level = 0;
     private bool secundaryactivate = false;
     private bool canShoot = true;
+    private bool ispaused;
 
 
     private float hp;
@@ -70,6 +72,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         hp = maxHp;
         Pbh.BarValue = hp;
         Pbe.BarValue = exp;
+        pause.gameObject.SetActive(false);
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -108,7 +111,6 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     void StartDash()
     {
-
         isDashing = true;
         dashEndTime = Time.time + dashDuration;
         nextDashTime = Time.time + dashCooldown;
@@ -132,6 +134,52 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             if (context.performed && canShoot && !attacking)
                 StartCoroutine(Shoot());
         }
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (death) { return; }
+        if (context.performed)
+        {
+            ispaused = !ispaused;
+
+            if (ispaused)
+            {
+                pause.gameObject.SetActive(true);
+                Time.timeScale = 0f;
+            }
+            if (!ispaused)
+            {
+                pause.gameObject.SetActive(false);
+                Time.timeScale = 1f;
+            }    
+        }
+    }
+
+    public void ButtonPause()
+    {
+        if (death) { return; }
+        
+        ispaused = !ispaused;
+
+        if (ispaused)
+        {
+            pause.gameObject.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        if (!ispaused)
+        {
+            pause.gameObject.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
+
+    public void MainMenuTime()
+    {
+        ispaused = !ispaused;
+        pause.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+        transition_Manager.LoadMainMenu();
     }
 
     public void ChangeHP(float amount)

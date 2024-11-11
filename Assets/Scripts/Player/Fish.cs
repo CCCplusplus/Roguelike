@@ -10,14 +10,17 @@ public class Fish : MonoBehaviour
     {
         if (collision != null)
         {
+            if (collision.CompareTag("Player"))
+                return;
+
             if (collision.CompareTag("Enemy"))
             {
                 Debug.Log("hit");
                 GameObject enemy = collision.gameObject;
                 enemy.GetComponent<IDamageable>()?.ChangeHP(-attackDamage);
-                Destroy(this);
+                Destroy(this.gameObject);
             }
-            else Destroy(this);
+            else Destroy(this.gameObject);
         }
     }
 }

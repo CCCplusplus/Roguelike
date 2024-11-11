@@ -16,6 +16,7 @@ public class Transition_Manager : MonoBehaviour
     public void LoadGame()
     {
         SceneManager.LoadSceneAsync("GamePlay");
+        Time.timeScale = 1.0f;
     }
 
     public void Quit()
