@@ -25,6 +25,10 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     private GameObject fishPrefab;
     [SerializeField]
     private Transform shootPoint;
+    [SerializeField]
+    private Transition_Manager transition_Manager;
+    [SerializeField]
+    private Canvas pause;
 
     //MarcoAntonio
     [SerializeField] private ParticleSystem levelUpEffect; //Efecto de particulas
@@ -44,11 +48,14 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     private int level = 0;
     private bool secundaryactivate = false;
     private bool canShoot = true;
+    private bool ispaused;
 
 
     private float hp;
     private float maxHp = 100f;
     private bool invencible = false;
+    public ProgressBar Pbh;
+    public ProgressBar Pbe;
 
     bool attacking = false;
 
@@ -57,12 +64,15 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     //MarcoAntonio
     //Agregar el controlador de animacion y asignar el GameOver screen desde el inspector
     //public Animator animator;
-    public GameObject gameOverScreen;
-    private bool death;
+
+    private bool death = false;
     //----------------------------------------
     private void Awake()
     {
         hp = maxHp;
+        Pbh.BarValue = hp;
+        Pbe.BarValue = exp;
+        pause.gameObject.SetActive(false);
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -101,7 +111,6 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     void StartDash()
     {
-
         isDashing = true;
         dashEndTime = Time.time + dashDuration;
         nextDashTime = Time.time + dashCooldown;
@@ -125,6 +134,52 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             if (context.performed && canShoot && !attacking)
                 StartCoroutine(Shoot());
         }
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (death) { return; }
+        if (context.performed)
+        {
+            ispaused = !ispaused;
+
+            if (ispaused)
+            {
+                pause.gameObject.SetActive(true);
+                Time.timeScale = 0f;
+            }
+            if (!ispaused)
+            {
+                pause.gameObject.SetActive(false);
+                Time.timeScale = 1f;
+            }    
+        }
+    }
+
+    public void ButtonPause()
+    {
+        if (death) { return; }
+        
+        ispaused = !ispaused;
+
+        if (ispaused)
+        {
+            pause.gameObject.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        if (!ispaused)
+        {
+            pause.gameObject.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
+
+    public void MainMenuTime()
+    {
+        ispaused = !ispaused;
+        pause.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+        transition_Manager.LoadMainMenu();
     }
 
     public void ChangeHP(float amount)
@@ -151,37 +206,21 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         //Reproduce la animacion de muerte
         //animator.SetTrigger("Die");
 
-        //Desactiva el sprite del jugador
+
         spriteRenderer.enabled = false;
 
-        //Mostrar la pantalla de Game Over despues de un breve retraso
-        //StartCoroutine(ShowGameOverScreen());
         death = true;
-        StartCoroutine(Reset());
+
+        StartCoroutine(ShowGameOverScreen());
         
     }
 
     private IEnumerator ShowGameOverScreen()
     {
-        //Espera a que termine la animacion(ajusta el tiempo la duracion de la animacion)
+        //Ajustar el tiempo para que se vea la animacion de muerte completa.
         yield return new WaitForSeconds(2.0f);
-        //Mostrar pantalla de Game Over
-        gameOverScreen.SetActive(true);
-    }
 
-    private IEnumerator Reset()
-    {
-        exp = 0.0f;
-        level = 0;
-        hp = maxHp;
-        secundaryactivate = false;
-        yield return new WaitForSeconds(3);
-        UpdateSecondaryAbilityImage();
-        secundaryCooldown = 6f;
-        dashCooldown = 1.5f;
-        transform.position = new Vector3(0, 0, 0);
-        spriteRenderer.enabled = true;
-        death = false;
+        transition_Manager.LoadGameover();
     }
 
     private IEnumerator ActivateHitbox()
@@ -231,31 +270,26 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void AddEXP(float amount)
     {
-        Debug.Log("Exp Increased by " +  amount);
+        if (level == 3) return;
+
         exp += amount;
 
-        if (exp >= 10)
+        if (exp >= 100)
         {
-            Debug.Log("level up time!");
             exp = 0;
             LvlUp();
         }
     }
 
-    //TODO: Crear un efecto de particulas, hacerle Play(); a ese efecto cada vez que se suba de nivel
-    //aseguarse de que el ese efecto de particulas no sea loop, ni play on awake.
+
     public void LvlUp()
     {
         if (levelUpEffect && !levelUpEffect.isPlaying)
         {
-            levelUpEffect.Play(); //Activa el efecto de particulas solo cuando sube de nivel
+            levelUpEffect.Play();
         }
         if (level == 0)
         {
-            //TODO: Que haya una imagen que represente la habilidad del secundaria, que este tachada
-            //cuando se suba de nivel cambiar la imagen por una no tachada,
-            //y durante el cooldown que se cambia a la imagen con tonos grises.
-            Debug.Log("LevelUP!");
             secundaryactivate = true;
             level = 1;
             UpdateSecondaryAbilityImage();
@@ -273,11 +307,13 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         {
             secundaryCooldown /= 2f;
             level = 3;
+            exp = 100.0f;
             return;
         }
 
         if (level == 3)
             return;
+
 
     }
     
@@ -295,6 +331,8 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     void Update()
     {
+        Pbh.BarValue = hp;
+        Pbe.BarValue = exp;
         if (isDashing)
         {
             if (Time.time >= dashEndTime)
