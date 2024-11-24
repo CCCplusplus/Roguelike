@@ -1,19 +1,31 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+using System.Collections;
+using UnityEngine.UI;
+
 public class Door : MonoBehaviour
 {
     public Transform destination;
     private bool playerInRange = false;
     private bool interactionTriggered = false;
 
+    //Referencia al Canvas para el Fade
+    public Animator transition;
+    public float transitionTime = 1f;
+    //public CanvasGroup fadeCanvas;
+    //public float fadeDuration = 1f;
+
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (playerInRange && context.performed && !interactionTriggered)
         {
             interactionTriggered = true;
-            TeleportPlayer();
-            interactionTriggered = false;
+
+            StartCoroutine(FadeAndTeleport()); //Inicia el Fade y la Teltransportacion
+
+            //TeleportPlayer();
+            //interactionTriggered = false;
         }
     }
 
@@ -41,5 +53,23 @@ public class Door : MonoBehaviour
         {
             player.transform.position = destination.position;
         }
+    }
+
+    private IEnumerator FadeAndTeleport()
+    {
+        // Activa el Canvas y reproduce la animación
+        transition.gameObject.SetActive(true);
+        transition.SetTrigger("Start"); // Usa un Trigger en el Animator llamado "Start"
+
+        // Espera a que termine la animación
+        yield return new WaitForSeconds(transitionTime);
+
+        // Teletransportar al jugador
+        TeleportPlayer();
+
+        // Desactiva el Canvas
+        transition.gameObject.SetActive(false);
+
+        interactionTriggered = false;
     }
 }
