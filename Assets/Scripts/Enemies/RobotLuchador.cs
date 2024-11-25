@@ -26,6 +26,10 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     public SpriteRenderer spriteR;
     public GameObject attackHitbox;
 
+    [SerializeField] private ParticleSystem attackParticlePrefab; // Prefab de partículas de ataque
+    [SerializeField] private Transform attackOrigin; // Posición de origen del ataque
+
+
     private void Awake()
     {
         currentHP = maxHP;
@@ -60,6 +64,22 @@ public class RobotLuchador : MonoBehaviour, IDamageable
         canAttack = false;
         isAttacking = true;
         yield return new WaitForSeconds(0.5f);
+
+        // Instanciar partículas en el origen del ataque
+        if (attackParticlePrefab != null && attackOrigin != null)
+        {
+            ParticleSystem particles = Instantiate(attackParticlePrefab, attackOrigin.position, Quaternion.identity);
+            Vector3 attackDirection = (player.position - attackOrigin.position).normalized;
+
+            // Ajustar rotación de partículas hacia el jugador
+            if (attackDirection != Vector3.zero)
+            {
+                particles.transform.rotation = Quaternion.LookRotation(Vector3.forward, attackDirection);
+            }
+
+            particles.Play();
+            Destroy(particles.gameObject, particles.main.duration + 0.1f);
+        }
 
         attackHitbox.SetActive(true); 
         yield return new WaitForSeconds(1.0f);

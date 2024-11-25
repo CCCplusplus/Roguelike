@@ -36,6 +36,9 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     [SerializeField] private Sprite secondaryAbilityActive; //Sprite no tachado
     [SerializeField] private Sprite secondaryAbilityInactive; //Sprite tachado
     [SerializeField] private Sprite secondaryAbilityCooldown; //Sprite en tonos grises
+
+    [SerializeField] private ParticleSystem attackParticlePrefab;
+    [SerializeField] private Transform hitboxCenter;
     //---------------------------
 
     private Transform me;
@@ -236,6 +239,16 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     {
         attacking = true;
         hit.enabled = true;
+
+        //Instanciar particulas en el centro del hitbox
+        if (attackParticlePrefab != null && hitboxCenter != null)
+        {
+            ParticleSystem particles = Instantiate(attackParticlePrefab, hitboxCenter.position, Quaternion.identity);
+            particles.Play();
+            Destroy(particles.gameObject, particles.main.duration); // Destruir después de la duración del efecto
+        }
+        //
+
         yield return new WaitForSeconds(attackDuration);
         hit.enabled = false;
         attacking = false;
@@ -479,29 +492,29 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             }
             else
             {
-                // Si no se mueve, reproducir animación de idle según la última dirección
-                if (lastDirection.x > 0)
-                {
-                    animator.Play("Player_Idle");
-                    spriteRenderer.flipX = false; // Asegúrate de que el sprite no esté volteado
-                }
-                else if (lastDirection.x < 0)
-                {
-                    animator.Play("Player_Idle");
-                    spriteRenderer.flipX = true; // Voltear el sprite hacia la izquierda
-                }
-                else if (lastDirection.y > 0)
-                {
-                    animator.Play("Player_Idle");
-                }
-                else if (lastDirection.y < 0)
-                {
-                    animator.Play("Player_Idle");
-                }
+                //// Si no se mueve, reproducir animación de idle según la última dirección
+                //if (lastDirection.x > 0)
+                //{
+                //    animator.Play("Player_Idle");
+                //    spriteRenderer.flipX = false; // Asegúrate de que el sprite no esté volteado
+                //}
+                //else if (lastDirection.x < 0)
+                //{
+                //    animator.Play("Player_Idle");
+                //    spriteRenderer.flipX = true; // Voltear el sprite hacia la izquierda
+                //}
+                //else if (lastDirection.y > 0)
+                //{
+                //    animator.Play("Player_Idle");
+                //}
+                //else if (lastDirection.y < 0)
+                //{
+                //    animator.Play("Player_Idle");
+                //}
 
-                //// Si no se mueve, se puede poner una animación de descanso o idle si lo prefieres
-                //animator.Play("Player_Idle");
-                //spriteRenderer.flipX = false;
+                // Si no se mueve, se puede poner una animación de descanso o idle si lo prefieres
+                animator.Play("Player_Idle");
+                spriteRenderer.flipX = false;
             }
         }
     }
