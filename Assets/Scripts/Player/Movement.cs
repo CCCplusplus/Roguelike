@@ -63,7 +63,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     //MarcoAntonio
     //Agregar el controlador de animacion y asignar el GameOver screen desde el inspector
-    //public Animator animator;
+    public Animator animator;
 
     private bool death = false;
     //----------------------------------------
@@ -92,7 +92,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if(death) { return; }
+        if (death) { return; }
         movementInput = context.ReadValue<Vector2>().normalized;
         if (movementInput != Vector2.zero)
         {
@@ -152,14 +152,14 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             {
                 pause.gameObject.SetActive(false);
                 Time.timeScale = 1f;
-            }    
+            }
         }
     }
 
     public void ButtonPause()
     {
         if (death) { return; }
-        
+
         ispaused = !ispaused;
 
         if (ispaused)
@@ -212,7 +212,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         death = true;
 
         StartCoroutine(ShowGameOverScreen());
-        
+
     }
 
     private IEnumerator ShowGameOverScreen()
@@ -247,7 +247,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         canShoot = true;
 
         //MarcoAntonio-----------------------
-        UpdateSecondaryAbilityImage(); //Restarua la imagen
+        UpdateSecondaryAbilityImage(); //Restaura la imagen
         //--------------------------
     }
 
@@ -262,7 +262,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
             yield return new WaitForSeconds(0.2f);
         }
-        
+
         invencible = false;
 
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
@@ -316,7 +316,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
 
     }
-    
+
     //Marco Antonio
     void UpdateSecondaryAbilityImage(bool isOnCooldown = false)
     {
@@ -333,6 +333,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     {
         Pbh.BarValue = hp;
         Pbe.BarValue = exp;
+        //Movimiento y Dash
         if (isDashing)
         {
             if (Time.time >= dashEndTime)
@@ -346,6 +347,19 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             me.position += (Vector3)(movementInput * speed * Time.deltaTime);
         }
 
+        // Actualizar rotación del personaje
+        if (movementInput != Vector2.zero)
+        {
+            lastDirection = movementInput;
+            UpdateRotation();
+        }
+
+        // Actualizar Animator
+        UpdateAnimator();
+    }
+
+    void UpdateRotation()
+    {
         if (lastDirection == Vector2.right)
             me.rotation = Quaternion.Euler(0, 0, 0);
         else if (lastDirection == Vector2.up)
@@ -354,5 +368,132 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             me.rotation = Quaternion.Euler(0, 0, -90);
         else if (lastDirection == Vector2.left)
             me.rotation = Quaternion.Euler(0, 180, 0);
+    }
+
+    void UpdateAnimator()
+    {
+        // Determinar si el personaje se está moviendo
+        bool isMoving = movementInput != Vector2.zero;
+
+        // Actualizar parámetros del Animator
+        //animator.SetBool("IsMoving", isMoving);
+        animator.SetBool("Attack", attacking);
+
+        //Si el personaje esta atacando, se reproduce la animacion de ataque
+        if (attacking)
+        {
+
+            if (movementInput.x > 0)
+            {
+                // Ataque hacia la derecha
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+            else if (movementInput.x < 0)
+            {
+                // Ataque hacia la izquierda
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+            else if (lastDirection.y > 0)
+            {
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+            else if (lastDirection.y < 0)
+            {
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+
+            //
+            if (lastDirection.x > 0)
+            {
+                // Ataque hacia la derecha
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+            else if (lastDirection.x < 0)
+            {
+                // Ataque hacia la izquierda
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+            else if (movementInput.y > 0)
+            {
+                // Ataque hacia arriba
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+            else if (movementInput.y < 0)
+            {
+                // Ataque hacia abajo
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+        }
+        else
+        {
+            // Si no está atacando, reproducir animación de caminar
+            animator.SetBool("IsMoving", isMoving);
+
+            if (isMoving)
+            {
+                if (Mathf.Abs(movementInput.x) > Mathf.Abs(movementInput.y))
+                {
+                    // Movimiento lateral (derecha o izquierda)
+                    if (movementInput.x > 0)
+                    {
+                        // Movimiento hacia la derecha
+                        animator.Play("Player_Side_Walk");
+                        spriteRenderer.flipX = true;
+                    }
+                    else if (movementInput.x < 0)
+                    {
+                        // Movimiento hacia la izquierda
+                        animator.Play("Player_Side_Walk");
+                        spriteRenderer.flipX = true;
+                    }
+                }
+                else if (movementInput.y > 0)
+                {
+                    // Movimiento hacia arriba
+                    animator.Play("Player_Back_Walk");
+                    spriteRenderer.flipX = false;
+                }
+                else if (movementInput.y < 0)
+                {
+                    // Movimiento hacia abajo
+                    animator.Play("Player_Front_Walk");
+                    spriteRenderer.flipX = false;
+                }
+            }
+            else
+            {
+                // Si no se mueve, reproducir animación de idle según la última dirección
+                if (lastDirection.x > 0)
+                {
+                    animator.Play("Player_Idle");
+                    spriteRenderer.flipX = false; // Asegúrate de que el sprite no esté volteado
+                }
+                else if (lastDirection.x < 0)
+                {
+                    animator.Play("Player_Idle");
+                    spriteRenderer.flipX = true; // Voltear el sprite hacia la izquierda
+                }
+                else if (lastDirection.y > 0)
+                {
+                    animator.Play("Player_Idle");
+                }
+                else if (lastDirection.y < 0)
+                {
+                    animator.Play("Player_Idle");
+                }
+
+                //// Si no se mueve, se puede poner una animación de descanso o idle si lo prefieres
+                //animator.Play("Player_Idle");
+                //spriteRenderer.flipX = false;
+            }
+        }
     }
 }

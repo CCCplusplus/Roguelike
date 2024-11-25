@@ -13,8 +13,6 @@ public class Door : MonoBehaviour
     //Referencia al Canvas para el Fade
     public Animator transition;
     public float transitionTime = 1f;
-    //public CanvasGroup fadeCanvas;
-    //public float fadeDuration = 1f;
 
     public void OnInteract(InputAction.CallbackContext context)
     {
