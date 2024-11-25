@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 5129843238336108613}
   - component: {fileID: 1999626297178121026}
   - component: {fileID: 2904260855955426676}
+  - component: {fileID: 6068234824563648135}
   m_Layer: 3
   m_Name: RobotPeleador
   m_TagString: Enemy
@@ -185,6 +186,7 @@ MonoBehaviour:
   speed: 4
   detectionRange: 10
   attackDistance: 2.5
+  animator: {fileID: 0}
   spriteR: {fileID: 5129843238336108613}
   attackHitbox: {fileID: 1810386709956898183}
 --- !u!58 &2904260855955426676
@@ -222,3 +224,24 @@ CircleCollider2D:
   m_Offset: {x: -0.039744377, y: 0.18168986}
   serializedVersion: 2
   m_Radius: 0.87852335
+--- !u!95 &6068234824563648135
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5192394250432932422}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ad4bfc63eb38bf24698f6d22808c04f4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

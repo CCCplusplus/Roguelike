@@ -22,7 +22,7 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     public static event System.Action OnEnemyDeath;
 
     // Referencias para la animacion y el sprite
-    // public Animator animator;
+    public Animator animator;
     public SpriteRenderer spriteR;
     public GameObject attackHitbox;
 
@@ -46,6 +46,8 @@ public class RobotLuchador : MonoBehaviour, IDamageable
             {
                 Vector2 direction = (player.position - transform.position).normalized;
                 transform.position += (Vector3)direction * speed * Time.deltaTime;
+                // Determinar la dirección del movimiento para las animaciones
+                UpdateAnimationDirection(direction);
             }
             else if (distanceToPlayer <= attackDistance && canAttack)
                 StartCoroutine(ActivateHitbox());
@@ -124,4 +126,52 @@ public class RobotLuchador : MonoBehaviour, IDamageable
 
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
     }
+
+    void UpdateAnimationDirection(Vector2 direction)
+    {
+        // Determinar si el enemigo se está moviendo
+        bool isMoving = direction != Vector2.zero;
+
+        // Actualizar parámetros del Animator
+        animator.SetBool("EnemyMove", isMoving);
+
+        if (isMoving)
+        {
+            // Comprobar dirección de movimiento y reproducir la animación correspondiente
+            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+            {
+                // Movimiento lateral (izquierda o derecha)
+                if (direction.x > 0)
+                {
+                    // Movimiento hacia la derecha
+                    animator.Play("Enemy_Right_Walk");
+                    spriteRenderer.flipX = false;
+                }
+                else if (direction.x < 0)
+                {
+                    // Movimiento hacia la izquierda
+                    animator.Play("Enemy_Left_Walk");
+                    spriteRenderer.flipX = false;
+                }
+            }
+            //else if (direction.y > 0)
+            //{
+            //    // Movimiento hacia arriba
+            //    animator.Play("Enemy_Walk_Back");
+            //    //spriteRenderer.flipX = false; // No voltear el sprite
+            //}
+            //else if (direction.y < 0)
+            //{
+            //    // Movimiento hacia abajo
+            //    animator.Play("Enemy_Front_Walk");
+            //    //spriteRenderer.flipX = false; // No voltear el sprite
+            //}
+        }
+        else
+        {
+            animator.Play("Enemy_Idle");
+            spriteRenderer.flipX = true;
+        }
+    }
+
 }
