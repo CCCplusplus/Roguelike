@@ -588,6 +588,18 @@ PrefabInstance:
       propertyPath: transition_Manager
       value: 
       objectReference: {fileID: 930649451}
+    - target: {fileID: 3335410334483468269, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: secondaryAbilityActive
+      value: 
+      objectReference: {fileID: 21300000, guid: 28677e776124ee0449c1afd4c5bbbf58, type: 3}
+    - target: {fileID: 3335410334483468269, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: secondaryAbilityCooldown
+      value: 
+      objectReference: {fileID: 21300000, guid: 99e903ebcee22654f9b399aba2aa4236, type: 3}
+    - target: {fileID: 3335410334483468269, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
+      propertyPath: secondaryAbilityInactive
+      value: 
+      objectReference: {fileID: 21300000, guid: 8a3eface1217ef04ca7f8d8b5c5134be, type: 3}
     - target: {fileID: 8456235143568696880, guid: 4ef6da0cd30a3fa439de82733c771c09, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1290,6 +1302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2680ed3dd79e882418cbaedf1d4df58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorial: {fileID: 0}
 --- !u!4 &930649452
 Transform:
   m_ObjectHideFlags: 0
