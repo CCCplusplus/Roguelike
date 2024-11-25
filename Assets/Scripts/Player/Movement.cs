@@ -67,18 +67,26 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     private bool death = false;
     //----------------------------------------
-    private void Awake()
-    {
-        hp = maxHp;
-        Pbh.BarValue = hp;
-        Pbe.BarValue = exp;
-        pause.gameObject.SetActive(false);
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
 
     void Start()
     {
         me = transform;
+        InitializeValues();
+    }
+
+    void InitializeValues()
+    {
+        hp = maxHp;
+        exp = 0;
+        Pbh.BarValue = hp;
+        Pbe.BarValue = exp;
+
+        pause.gameObject.SetActive(false);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        isDashing = false;
+        secundaryactivate = false;
+        death = false;
+
         //MarcoAntonio
         if (levelUpEffect)
         {
@@ -89,6 +97,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         UpdateSecondaryAbilityImage();
         //--------------------------
     }
+
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -178,8 +187,8 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
     {
         ispaused = !ispaused;
         pause.gameObject.SetActive(false);
-        Time.timeScale = 1f;
         transition_Manager.LoadMainMenu();
+        Time.timeScale = 1f;
     }
 
     public void ChangeHP(float amount)
