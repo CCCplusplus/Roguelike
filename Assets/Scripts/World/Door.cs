@@ -55,17 +55,19 @@ public class Door : MonoBehaviour
 
     private IEnumerator FadeAndTeleport()
     {
-        // Activa el Canvas y reproduce la animación
         transition.gameObject.SetActive(true);
         transition.SetTrigger("Start"); // Usa un Trigger en el Animator llamado "Start"
+        Time.timeScale = 0.8f; // Pausa el tiempo
+        yield return new WaitForSecondsRealtime(transitionTime); // Espera a que termine Fade Out
 
-        // Espera a que termine la animación
-        yield return new WaitForSeconds(transitionTime);
-
-        // Teletransportar al jugador
         TeleportPlayer();
 
+        transition.SetTrigger("End");
+        yield return new WaitForSecondsRealtime(transitionTime); // Espera a que termine Fade In
+
+
         // Desactiva el Canvas
+        Time.timeScale = 1f;
         transition.gameObject.SetActive(false);
 
         interactionTriggered = false;

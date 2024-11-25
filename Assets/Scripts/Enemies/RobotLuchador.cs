@@ -63,6 +63,13 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     {
         canAttack = false;
         isAttacking = true;
+
+        // Establece el Trigger para iniciar la animación de ataque
+        if (animator != null)
+        {
+            animator.SetTrigger("Attacking");
+        }
+
         yield return new WaitForSeconds(0.5f);
 
         // Instanciar partículas en el origen del ataque
@@ -149,6 +156,13 @@ public class RobotLuchador : MonoBehaviour, IDamageable
 
     void UpdateAnimationDirection(Vector2 direction)
     {
+        // Si el enemigo está atacando, reproduce únicamente la animación de ataque
+        if (isAttacking)
+        {
+            animator.Play("Enemy_Attack");
+            return;
+        }
+
         // Determinar si el enemigo se está moviendo
         bool isMoving = direction != Vector2.zero;
 
