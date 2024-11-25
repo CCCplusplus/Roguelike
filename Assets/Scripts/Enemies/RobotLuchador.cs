@@ -29,6 +29,7 @@ public class RobotLuchador : MonoBehaviour, IDamageable
     [SerializeField] private ParticleSystem attackParticlePrefab; // Prefab de partículas de ataque
     [SerializeField] private Transform attackOrigin; // Posición de origen del ataque
 
+    public Door door;
 
     private void Awake()
     {
@@ -131,7 +132,9 @@ public class RobotLuchador : MonoBehaviour, IDamageable
 
         playerG.GetComponent<Movement>().AddEXP(expValue);
 
-        Debug.Log("El enemigo ha muerto.");
+        if (door != null)
+            door.locked = false;
+          
         // Destruir el objeto después de un pequeño retraso 
         //quite el retraso para hacer test al spawn lo devolvemos cuando tengamos animaciones de muertes.
         Destroy(gameObject);

@@ -14,13 +14,27 @@ public class Door : MonoBehaviour
     public Animator transition;
     public float transitionTime = 1f;
 
+    public bool locked = false;
+
+    public AudioSource audioSource;
+    public AudioClip lockedClip;
+    public AudioClip open;
+
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (playerInRange && context.performed && !interactionTriggered)
         {
-            interactionTriggered = true;
+            if (!locked)
+            {
+                interactionTriggered = true;
 
-            StartCoroutine(FadeAndTeleport()); //Inicia el Fade y la Teltransportacion
+                StartCoroutine(FadeAndTeleport()); //Inicia el Fade y la Teltransportacion
+            }
+            else
+            {
+                if (!audioSource.isPlaying)
+                    audioSource.PlayOneShot(lockedClip);
+            }
 
             //TeleportPlayer();
             //interactionTriggered = false;
@@ -32,7 +46,8 @@ public class Door : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
-            Debug.Log("Door Ready!");
+            Movement player = other.GetComponent<Movement>();
+            player.interact.gameObject.SetActive(true);
         }
     }
 
@@ -41,7 +56,8 @@ public class Door : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            Debug.Log("You're too far Away now!");
+            Movement player = other.GetComponent<Movement>();
+            player.interact.gameObject.SetActive(false);
         }
     }
     private void TeleportPlayer()
@@ -49,25 +65,26 @@ public class Door : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
+            if (!audioSource.isPlaying)
+                audioSource.PlayOneShot(open);
+
             player.transform.position = destination.position;
         }
     }
 
     private IEnumerator FadeAndTeleport()
     {
+        // Activa el Canvas y reproduce la animación
         transition.gameObject.SetActive(true);
         transition.SetTrigger("Start"); // Usa un Trigger en el Animator llamado "Start"
-        Time.timeScale = 0.8f; // Pausa el tiempo
-        yield return new WaitForSecondsRealtime(transitionTime); // Espera a que termine Fade Out
 
+        // Espera a que termine la animación
+        yield return new WaitForSeconds(transitionTime);
+
+        // Teletransportar al jugador
         TeleportPlayer();
 
-        transition.SetTrigger("End");
-        yield return new WaitForSecondsRealtime(transitionTime); // Espera a que termine Fade In
-
-
         // Desactiva el Canvas
-        Time.timeScale = 1f;
         transition.gameObject.SetActive(false);
 
         interactionTriggered = false;

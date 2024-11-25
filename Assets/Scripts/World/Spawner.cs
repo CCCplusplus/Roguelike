@@ -4,6 +4,10 @@ public class Spawner : MonoBehaviour
 {
     public bool shooter;
     private int counter = 0;
+    private int spanwedEnemies = 0;
+
+    [SerializeField]
+    private int maxSpawnedEnemies = 5;
 
     [SerializeField]
     private GameObject fighterPrefab;
@@ -12,13 +16,17 @@ public class Spawner : MonoBehaviour
 
     private void OnEnable()
     {
+        if (!shooter)
         RobotLuchador.OnEnemyDeath += DecreaseCounter;
+        else
         RobotPistolero.OnEnemyDeath += DecreaseCounter;
     }
 
     private void OnDisable()
     {
+        if (!shooter)
         RobotLuchador.OnEnemyDeath -= DecreaseCounter;
+        else
         RobotPistolero.OnEnemyDeath -= DecreaseCounter;
     }
 
@@ -29,6 +37,8 @@ public class Spawner : MonoBehaviour
 
     void Update()
     {
+        if (spanwedEnemies >= maxSpawnedEnemies) this.gameObject.SetActive(false);
+
         if (counter != 0) return;
         SpawnEnemy();
     }
@@ -46,5 +56,6 @@ public class Spawner : MonoBehaviour
     private void DecreaseCounter()
     {
         counter--;
+        spanwedEnemies++;
     }
 }

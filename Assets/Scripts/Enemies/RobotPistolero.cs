@@ -26,6 +26,8 @@ public class RobotPistolero : MonoBehaviour, IDamageable
     //public Animator animator;
     public SpriteRenderer spriteR;
 
+    public Door door;
+
     private void Awake()
     {
         playerG = GameObject.FindGameObjectWithTag("Player");
@@ -144,7 +146,8 @@ public class RobotPistolero : MonoBehaviour, IDamageable
 
 
 
-        Debug.Log("El enemigo ha muerto.");
+        if (door != null)
+            door.locked = false;
 
         //Destruir el objeto despues de un pequeño retraso
         //quite el retraso para hacer test al spawn lo devolvemos cuando tengamos animaciones de muertes.

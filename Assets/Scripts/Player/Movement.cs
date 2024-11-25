@@ -64,12 +64,19 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     private SpriteRenderer spriteRenderer;
 
+    public Image interact;
+
     //MarcoAntonio
     //Agregar el controlador de animacion y asignar el GameOver screen desde el inspector
     public Animator animator;
 
     private bool death = false;
     //----------------------------------------
+
+    public AudioSource audioSource;
+    public AudioClip attack;
+    public AudioClip zoom;
+    public AudioClip shoot;
 
     void Start()
     {
@@ -89,6 +96,8 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         isDashing = false;
         secundaryactivate = false;
         death = false;
+
+        interact.gameObject.SetActive(false);
 
         //MarcoAntonio
         if (levelUpEffect)
@@ -123,6 +132,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
 
     void StartDash()
     {
+        audioSource.PlayOneShot(zoom);
         isDashing = true;
         dashEndTime = Time.time + dashDuration;
         nextDashTime = Time.time + dashCooldown;
@@ -240,6 +250,8 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         attacking = true;
         hit.enabled = true;
 
+        audioSource.PlayOneShot(attack);
+
         //Instanciar particulas en el centro del hitbox
         if (attackParticlePrefab != null && hitboxCenter != null)
         {
@@ -263,6 +275,7 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
         UpdateSecondaryAbilityImage(true); //Cambia la imagen a gris
         //--------------------------
 
+        audioSource.PlayOneShot(shoot);
         GameObject fish = Instantiate(fishPrefab, shootPoint.position, Quaternion.identity);
         fish.GetComponent<Rigidbody2D>().velocity = transform.right * 10f;
         yield return new WaitForSeconds(secundaryCooldown);

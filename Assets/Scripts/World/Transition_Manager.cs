@@ -40,6 +40,11 @@ public class Transition_Manager : MonoBehaviour
         tutorial.SetActive(showTurotial);
     }
 
+    public void Victory()
+    {
+        SceneManager.LoadSceneAsync("Vicroty");
+    }
+
     public void Quit()
     {
         Application.Quit();
