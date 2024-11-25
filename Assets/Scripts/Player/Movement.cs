@@ -400,24 +400,26 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
             {
                 // Ataque hacia la derecha
                 animator.Play("Player_Attack");
-                spriteRenderer.flipX = true; // Asegúrate de que el sprite no esté volteado
+                spriteRenderer.flipX = true; 
             }
             else if (lastDirection.x < 0)
             {
                 // Ataque hacia la izquierda
                 animator.Play("Player_Attack");
-                spriteRenderer.flipX = true; // Voltear el sprite hacia la izquierda
+                spriteRenderer.flipX = true; 
             }
-            //else if (movementInput.y > 0)
-            //{
-            //    // Ataque hacia arriba
-            //    animator.Play("Player_Attack_Up");
-            //}
-            //else if (movementInput.y < 0)
-            //{
-            //    // Ataque hacia abajo
-            //    animator.Play("Player_Attack_Down");
-            //}
+            else if (movementInput.y > 0)
+            {
+                // Ataque hacia arriba
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
+            else if (movementInput.y < 0)
+            {
+                // Ataque hacia abajo
+                animator.Play("Player_Attack");
+                spriteRenderer.flipX = true;
+            }
         }
         else
         {
@@ -446,13 +448,13 @@ public class Movement : MonoBehaviour, IDamageable, IExperience
                 {
                     // Movimiento hacia arriba
                     animator.Play("Player_Back_Walk");
-                    //spriteRenderer.flipX = false;
+                    spriteRenderer.flipX = false;
                 }
                 else if (movementInput.y < 0)
                 {
                     // Movimiento hacia abajo
                     animator.Play("Player_Front_Walk");
-                    //spriteRenderer.flipX = false;
+                    spriteRenderer.flipX = false;
                 }
             }
             else
