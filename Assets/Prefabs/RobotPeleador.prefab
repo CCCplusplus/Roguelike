@@ -187,11 +187,11 @@ MonoBehaviour:
   speed: 4
   detectionRange: 10
   attackDistance: 2.5
-  animator: {fileID: 0}
+  animator: {fileID: 6068234824563648135}
   spriteR: {fileID: 5129843238336108613}
   attackHitbox: {fileID: 1810386709956898183}
-  attackParticlePrefab: {fileID: 0}
-  attackOrigin: {fileID: 0}
+  attackParticlePrefab: {fileID: 8104868906010650006}
+  attackOrigin: {fileID: 8585555693318835336}
 --- !u!58 &2904260855955426676
 CircleCollider2D:
   m_ObjectHideFlags: 0
